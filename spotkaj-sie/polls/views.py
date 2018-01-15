@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 from django.shortcuts import get_object_or_404, render
-from django.http import Http404, HttpResponse
+from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.urls import reverse
-
+from django.contrib.auth.views import login
 
 from .models import Question
 
@@ -40,3 +40,10 @@ def vote(request, question_id):
         # with POST data. This prevents data from being posted twice if a
         # user hits the Back button.
         return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
+
+
+
+
+def user_profile(request):
+    print(request.user.get_full_name())
+    return render(request, 'polls/user_profile.html', {'username':request.user.username})
