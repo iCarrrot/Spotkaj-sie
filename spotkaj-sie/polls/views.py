@@ -52,9 +52,45 @@ def user_profile(request):
         return render(request, 'polls/user_profile.html', {'error_message': "Musisz być zalogowany!"})
 
 
-
 def event(request):
-    return render(request, 'polls/create_event.html')
+    if request.method == "POST":
+
+        try:
+            start_date = request.POST['start_date']
+            start_time = request.POST['start_time']
+            duration = request.POST['duration']
+
+            title = request.POST['title']
+            start_datetime = utc.localize(datetime.combine(
+                datetime.strptime(start_date, "%Y-%m-%d"),
+                datetime.strptime(start_time, "%H:%M").time()))
+            duration = utc.localize(
+                datetime.strptime(duration, "%H:%M").time())
+            quantity = request.POST['quantity']
+            new_event = Event.objects.create(
+                searching_start_time=start_datetime,
+                duration=duration,
+                title=title,
+                quantity=quantity
+            )
+
+            message = {
+                'mtype': "success",
+                'text': "Pomyślnie dodano do bazy danych",
+                'bold': "Sukces!"
+            }
+
+            return render(request, 'polls/create_event.html', {'message': message})
+        except:
+            message = {
+                'mtype': "danger",
+                'text': "Nie udało się dodać planów do bazy danych",
+                'bold': "Błąd!"
+            }
+
+            return render(request, 'polls/create_event.html', {'message': message})
+    else:
+        return render(request, 'polls/create_event.html')
 
 
 def plans(request):
@@ -77,17 +113,18 @@ def plans(request):
                 start_time=start_datetime,
                 end_time=end_datetime,
                 title=title)
-            print(new_plan.pk)
             message = {
                 'mtype': "success",
-                'text': "Pomyślnie dodano do bazy danych"
+                'text': "Pomyślnie dodano do bazy danych",
+                'bold': "Sukces!"
             }
 
             return render(request, 'polls/add_plans.html', {'message': message})
         except:
             message = {
                 'mtype': "danger",
-                'text': "Błąd! Nie udało się dodać planów do bazy danych"
+                'text': "Nie udało się dodać planów do bazy danych",
+                'bold': "Błąd!"
             }
 
             return render(request, 'polls/add_plans.html', {'message': message})

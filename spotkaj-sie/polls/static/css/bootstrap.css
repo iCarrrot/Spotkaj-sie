@@ -14,6 +14,7 @@
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  */
 /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */
+/*
 html {
   font-family: sans-serif;
   -ms-text-size-adjust: 100%;
@@ -198,6 +199,7 @@ th {
   padding: 0;
 }
 /*! Source: https://github.com/h5bp/html5-boilerplate/blob/master/src/css/main.css */
+/*
 @media print {
   *,
   *:before,
@@ -3536,4 +3538,4 @@ button.list-group-item-danger.active:focus {
   .hidden-print {
     display: none !important;
   }
-}
+} */

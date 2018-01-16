@@ -1,4 +1,71 @@
-{% extends 'polls/base.html' %} {% block content %}
+{% extends 'polls/base.html' %} {% block content %} {% if form.errors %}
+<div class="alert alert-danger">
+    <strong>Błąd!</strong> Popraw błędy
+</div>
+{% endif %} {% if message %}
+<div class="alert alert-{{message.mtype}}">
+    <strong>{{message.bold}}</strong> {{message.text}}
+</div>
+{% endif %}
+<div class="jumbotron">
+    <h1>Utwórz nowe wydarzenie</h1>
+    <br>
+    <form class="col-2" method="POST" action="{% url 'polls:event' %}">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="exampleTextarea">Tytuł</label>
+            <input name="title" type="text" class="form-control" rows="1" placeholder="Tytuł" required>
+        </div>
+        <label for="start_datatime">Wybierz datę i czas rozpoczęcia poszukiwań:</label>
+        <div class="row" id="start_datetime">
+            <div class="form-group col-7">
+                <label for="start_date">Data: </label>
+                <input class="form-control" type="date" id="start_date" name="start_date" required>
+            </div>
+            <div class="form-group col-5">
+                <label for="start_time">Czas: </label>
+                <input class="form-control" type="time" id="start_time" name="start_time" required>
+            </div>
+        </div>
+        <fieldset class="form-group" name="time">
+            <legend>Wybierz czas trwania</legend>
+            <div class="form-check">
+                <label class="form-check-label"></label>
+                    <input type="radio" class="form-check-input" id="time_0-15" name="duration" value="00:15" > 15 minut
+                </label>
+            </div>
+            <div class="form-check">
+                <label class="form-check-label"></label>
+                    <input type="radio" class="form-check-input" id="time_0-30" name="duration" value="00:30" > 30 minut
+                </label>
+            </div>
+            <div class="form-check">
+                <label class="form-check-label"></label>
+                    <input type="radio" class="form-check-input" id="time_0-45" name="duration" value="00:45" > 45 minut
+                </label>
+            </div>
+            <div class="form-check">
+                <label class="form-check-label"></label>
+                    <input type="radio" class="form-check-input" id="time_1-0" name="duration" value="01:00" checked> 1 godzina
+                </label>
+            </div>
+            <div class="form-check">
+                <label class="form-check-label"></label>
+                    <input type="radio" class="form-check-input" id="time_1-30" name="duration" value="01:30" > 1.5 godziny
+                </label>
+            </div>
+            <div class="form-check">
+                <label class="form-check-label"></label>
+                    <input type="radio" class="form-check-input" id="time_2-0" name="duration" value="02:00" > 2 godziny
+                </label>
+            </div>
+        </fieldset>
+        <div class="form-group">
+            <label for="exampleTextarea">Wybierz liczbę uczestników</label>
+            <input name="quantity" type="number" class="form-control"  min="0" value="0" required>
+        </div>
 
-<h1>utwórz wydarzenie</h1>
+        <button type="submit" class="btn btn-primary">Wyślij</button>
+    </form>
+</div>
 {% endblock %}

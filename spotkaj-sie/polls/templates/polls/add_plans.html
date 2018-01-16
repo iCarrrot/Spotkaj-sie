@@ -4,7 +4,7 @@
 </div>
 {% endif %} {% if message %}
 <div class="alert alert-{{message.mtype}}">
-    {{message.text}}
+    <strong>{{message.bold}}</strong> {{message.text}}
 </div>
 {% endif %}
 <div class="jumbotron">
@@ -14,28 +14,28 @@
         {% csrf_token %}
         <div class="form-group">
             <label for="exampleTextarea">Tytuł</label>
-            <input name="title" type="text" class="form-control" rows="1">
+            <input name="title" type="text" class="form-control" rows="1" placeholder="Tytuł" required>
         </div>
         <label for="start_datatime">Wybierz datę i czas rozpoczęcia:</label>
         <div class="row" id="start_datetime">
             <div class="form-group col-7">
                 <label for="start_date">Data: </label>
-                <input class="form-control" type="date" id="start_date" name="start_date">
+                <input class="form-control" type="date" id="start_date" name="start_date" required>
             </div>
             <div class="form-group col-5">
                 <label for="start_time">Czas: </label>
-                <input class="form-control" type="time" id="start_time" name="start_time">
+                <input class="form-control" type="time" id="start_time" name="start_time" required>
             </div>
         </div>
         <label for="end_datatime">Wybierz datę i czas zakończenia:</label>
         <div class="row" id="end_datetime">
             <div class="form-group col-7">
                 <label for="end_date">Data: </label>
-                <input class="form-control" type="date" id="end_date" name="end_date">
+                <input class="form-control" type="date" id="end_date" name="end_date" required>
             </div>
             <div class="form-group col-5">
                 <label for="end_time">Czas: </label>
-                <input class="form-control" type="time" id="end_time" name="end_time">
+                <input class="form-control" type="time" id="end_time" name="end_time" required>
             </div>
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>
