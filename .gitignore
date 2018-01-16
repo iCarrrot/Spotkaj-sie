@@ -4,3 +4,4 @@
 db.sqlite3
 spotkaj-sie/polls/migrations/*.py
 */.vscode/*
+.vscode/*

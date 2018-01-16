@@ -27,7 +27,7 @@
     color: white !important;
 }
 .right-nav a {
-    display: block;
+    display: inline-block;
     text-align: center;
     padding: 14px 16px;
     text-decoration: none;
@@ -37,6 +37,6 @@
 .left-nav a:hover {
     background-color: #111;
 }
-.right-nav:hover {
+.right-nav a:hover {
     background-color: #111;
 }

@@ -1,3 +1,29 @@
-{% extends 'polls/base.html' %} {% block content %}
-<h1>Witaj {{ username}}!</h1>
-{% endblock %}
+{% extends 'polls/base.html' %} {% block content %} {% if user.is_authenticated %}
+<br>
+
+<div class="jumbotron">
+    <h1 class="display-3">Witaj {{ user.username}}!</h1>
+    <p class="lead">Możesz dodać swoje zajęcia, lub utworzyć wydarzenie.</p>
+    <p>
+        <a href="{% url 'polls:plans' %}" class="btn btn-info btn-lg">
+            Dodaj Zajęcia
+        </a>
+    </p>
+    <p>
+        <a href="{% url 'polls:event' %}" class="btn btn-success btn-lg">
+            Utwórz wydarzenie
+        </a>
+    </p>
+</div>
+<p>
+    <a href="{% url 'polls:logout' %}" class="btn btn-primary btn-lg">
+        Wyloguj
+    </a>
+</p>
+
+
+{% else %}
+<a href="{% url 'polls:login' %}" class="btn btn-primary btn-lg">
+    Zaloguj
+</a>
+{% endif %} {% endblock %}
