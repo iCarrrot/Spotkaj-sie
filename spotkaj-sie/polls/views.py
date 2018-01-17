@@ -59,17 +59,16 @@ def event(request):
             start_date = request.POST['start_date']
             start_time = request.POST['start_time']
             duration = request.POST['duration']
-
             title = request.POST['title']
             start_datetime = utc.localize(datetime.combine(
                 datetime.strptime(start_date, "%Y-%m-%d"),
                 datetime.strptime(start_time, "%H:%M").time()))
-            duration = utc.localize(
-                datetime.strptime(duration, "%H:%M").time())
+            durationTZ = datetime.strptime(duration, "%H:%M").time()
             quantity = request.POST['quantity']
+            print(durationTZ, duration)
             new_event = Event.objects.create(
                 searching_start_time=start_datetime,
-                duration=duration,
+                duration=durationTZ,
                 title=title,
                 quantity=quantity
             )
