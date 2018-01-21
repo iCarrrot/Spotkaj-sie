@@ -4,16 +4,47 @@
 <div class="jumbotron">
     <h1 class="display-3">Witaj {{ user.username}}!</h1>
     <p class="lead">Możesz dodać swoje zajęcia, lub utworzyć wydarzenie.</p>
-    <p>
-        <a href="{% url 'polls:plans' %}" class="btn btn-info btn-lg">
-            Dodaj Zajęcia
-        </a>
-    </p>
-    <p>
-        <a href="{% url 'polls:event' %}" class="btn btn-success btn-lg">
-            Utwórz wydarzenie
-        </a>
-    </p>
+    <div class="row">
+        <div class="col-1">
+            <a href="{% url 'polls:plans' %}" class="btn btn-info btn-lg">
+                Dodaj Zajęcia
+            </a>
+        </div>
+        {% if request.user.is_superuser %}
+        <div class="col-1">
+
+        </div>
+
+        <div class="col-1">
+            <form class="row" method="POST" action="{% url 'polls:delete_plans' %}">
+                    {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Usuń wszystkie plany</button>
+            </form>
+        </div>
+        {% endif %}
+    </div>
+    <br>
+    <br>
+    <div class="row">
+        <div class="col-1">
+            <a href="{% url 'polls:event' %}" class="btn btn-success btn-lg">
+                Utwórz wydarzenie
+            </a>
+        </div>
+        {% if request.user.is_superuser %}
+        <div class="col-1">
+
+        </div>
+
+        <div class="col-1">
+            <form class="row" method="POST" action="{% url 'polls:delete_events' %}">
+                    {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Usuń wszystkie wydarzenia</button>
+            </form>
+        </div>
+        {% endif %}
+    </div>
+
 </div>
 <p>
     <a href="{% url 'polls:logout' %}" class="btn btn-primary btn-lg">

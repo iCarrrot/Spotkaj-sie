@@ -1,0 +1,34 @@
+{% extends 'polls/base.html' %} {% block content %} 
+{% if form.errors %}
+<div class="alert alert-danger">
+    <strong>Błąd!</strong> Popraw błędy
+</div>
+{% endif %} {% if message %}
+<div class="alert alert-{{message.mtype}}">
+    <strong>{{message.bold}}</strong> {{message.text}}
+</div>
+{% endif %}
+<div class="jumbotron">
+    <h1>Znaleziono termin w dniu: {{ date }}</h1>
+    <br>
+    <form class="col-4" method="POST" action="{% url 'polls:new_event' event.id %}">
+        {% csrf_token %}
+
+        <fieldset class="form-group" name="time">
+            <legend>Wybierz czas rozpoczęcia:</legend>
+            {% for time in list_of_term %}
+            <div class="form-check">
+                <label class="form-check-label">
+                    <input type="radio" class="form-check-input" id="{{time}}" name="start_time" value="{{time.timestamp}}"> {{time.time}}
+                </label>
+            </div>
+            {% endfor %}
+        </fieldset>
+        <button type="submit" class="btn btn-primary">Wybierz</button>
+
+
+    </form>
+
+
+</div>
+{% endblock %}

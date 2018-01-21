@@ -10,7 +10,7 @@
 <div class="jumbotron">
     <h1>Utwórz nowe wydarzenie</h1>
     <br>
-    <form class="col-2" method="POST" action="{% url 'polls:event' %}">
+    <form class="col-4" method="POST" action="{% url 'polls:event' %}">
         {% csrf_token %}
         <div class="form-group">
             <label for="exampleTextarea">Tytuł</label>

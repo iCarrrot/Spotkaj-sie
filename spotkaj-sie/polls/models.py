@@ -47,8 +47,8 @@ class Plan(models.Model):
 
 class Event(models.Model):
     searching_start_time = models.DateTimeField(default=timezone.now)
-    duration = models.TimeField(default=0)
-    founded_time = models.DateTimeField(null=True, blank=True, default=None)
+    duration = models.FloatField(default=0)
+    found_time = models.DateTimeField(null=True, blank=True, default=None)
     title = models.CharField('Tytuł', max_length=200)
     quantity = models.IntegerField(
         'Liczba osób', default=0, blank=False, null=False)
@@ -56,5 +56,5 @@ class Event(models.Model):
     def __str__(self):
         return self.title
 
-    def is_founded(self):
-        return self.founded_time is not None
+    def is_found(self):
+        return self.found_time is not None
