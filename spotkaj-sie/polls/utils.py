@@ -19,15 +19,17 @@ def day_terms_for_user(duration, list_of_terms, searching_start_time, searching_
                   From mask there are removed free-time sequences shorter then duration.
     """
 
-    terms = [True for x in range(60 * 24 + 1)]
-    terms[60 * 24] = False
+    terms = [1*1 for x in range(60 * 24 + 1)]
+    # print(terms)
+    terms[60 * 24] = 0*0
     terms[:60 * searching_start_time.hour +
           searching_start_time.minute] = \
-        [False for x in range(60 * searching_start_time.hour +
+        [0*0 for x in range(60 * searching_start_time.hour +
                               searching_start_time.minute)]
+                   
     terms[60 * searching_end_time.hour +
           searching_end_time.minute + 1: 60 * 24 + 1] = \
-        [False for x in range(60 * searching_end_time.hour +
+        [0*0 for x in range(60 * searching_end_time.hour +
                               searching_end_time.minute + 1, 60 * 24 + 1)]
     for term in list_of_terms:
         start = term.start_time
@@ -38,10 +40,10 @@ def day_terms_for_user(duration, list_of_terms, searching_start_time, searching_
             end = searching_start_time
 
         terms[start.hour * 60 + start.minute: end.hour * 60 + end.minute] = \
-            [False for x in range(
+            [0*0 for x in range(
                 start.hour * 60 + start.minute,
                 end.hour * 60 + end.minute)]
-
+    
     (counter, seq_start, seq_end) = (0, 0, 0)
     for time in range(24 * 60 + 1):
         if terms[time] == 1 and terms[time - 1] == 1 and time > 0:
@@ -53,7 +55,8 @@ def day_terms_for_user(duration, list_of_terms, searching_start_time, searching_
             seq_end = time
         elif terms[time] == 0 and terms[time - 1] == 1 and time > 0 and counter < duration:
             terms[seq_start:seq_end +
-                  1] = [False for i in range(seq_start, seq_end + 1)]
+                  1] = [0*0 for i in range(seq_start, seq_end + 1)]
+    # print(len(terms)," ",duration,"\n",terms,'\n\n')  
     return terms
 
 
@@ -81,14 +84,19 @@ def day_terms(duration, list_of_user_terms, searching_start_time, searching_end_
             user_terms[term.user.id] += [term]
         except KeyError:
             user_terms[term.user.id] = [term]
-    quantity -= users - len(user_terms)
+    quantity -= (users - len(user_terms))
+    if quantity < -1:
+        quantity = -1
+
     u_terms = [0 for x in range(60 * 24 + 1)]
+    u_terms[60*24]=-2
     for _ in user_terms:
         user_pattern = day_terms_for_user(duration=duration,
                                           list_of_terms=list_of_user_terms,
                                           searching_start_time=searching_start_time,
                                           searching_end_time=searching_end_time)
         u_terms = [sum(x) for x in zip(* (u_terms, user_pattern))]
+    # print( u_terms)
     (counter, s, e) = (0, 0, 0)
     list_of_terms = []
     for time in range(24 * 60 + 1):
@@ -111,7 +119,7 @@ def day_terms(duration, list_of_user_terms, searching_start_time, searching_end_
     return list_of_terms
 
 
-def find_term(duration, terms, searching_start_time, quantity, users):
+def find_term(duration, terms, searching_start_time, quantity, users, end_time):
     """Find free term for meeting day-by-day
 
     Arguments:
@@ -125,7 +133,8 @@ def find_term(duration, terms, searching_start_time, quantity, users):
         (datetime,list(datetime, datetime, int)) --datetime and list with available gaps:
             start time, end time and length of sequence
     """
-
+    if quantity > users:
+        raise Exception('Bad quantity')
     searching_end_time = searching_start_time.replace(hour=23,
                                                       minute=59,
                                                       second=59,
@@ -142,7 +151,7 @@ def find_term(duration, terms, searching_start_time, quantity, users):
                                                             second=0,
                                                             microsecond=0)
         searching_start_time += datetime.timedelta(days=1)
-
+    it = 0
     while list_of_terms == []:
         searching_start_time += datetime.timedelta(days=1)
         searching_end_time += datetime.timedelta(days=1)
@@ -153,4 +162,8 @@ def find_term(duration, terms, searching_start_time, quantity, users):
                                   searching_end_time=searching_end_time,
                                   quantity=quantity,
                                   users=users)
+        it += 1
+        if it > 10:
+            raise Exception("Too long searching time")
+
     return (searching_start_time.date(), list_of_terms)

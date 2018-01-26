@@ -5,27 +5,27 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 
 
-class Question(models.Model):
-    question_text = models.CharField(max_length=200)
-    # activation_time = models.DateTimeField(null=True, blank=True)
-    # deactivation_time = models.DateTimeField(null=True, blank=True)
-    pub_date = models.DateField(default=date.today)
+# class Question(models.Model):
+#     question_text = models.CharField(max_length=200)
+#     # activation_time = models.DateTimeField(null=True, blank=True)
+#     # deactivation_time = models.DateTimeField(null=True, blank=True)
+#     pub_date = models.DateField(default=date.today)
 
-    def __str__(self):
-        return self.question_text
+#     def __str__(self):
+#         return self.question_text
 
 
-class Choice(models.Model):
-    """
-    Class representing answer to a question.
-    """
+# class Choice(models.Model):
+#     """
+#     Class representing answer to a question.
+#     """
 
-    question = models.ForeignKey(Question, on_delete=models.CASCADE)
-    choice_text = models.CharField('Odpowiedź', max_length=200)
-    votes = models.IntegerField('Liczba głosów', default=0)
+#     question = models.ForeignKey(Question, on_delete=models.CASCADE)
+#     choice_text = models.CharField('Odpowiedź', max_length=200)
+#     votes = models.IntegerField('Liczba głosów', default=0)
 
-    def __str__(self):
-        return self.choice_text
+#     def __str__(self):
+#         return self.choice_text
 
 
 class Plan(models.Model):

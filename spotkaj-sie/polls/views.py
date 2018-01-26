@@ -8,8 +8,9 @@ from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib.auth.models import User
+from django.db.models import Max
 import pytz
-from .models import Question, Plan, Event, Choice
+from .models import Plan, Event
 from .utils import find_term
 
 
@@ -17,47 +18,7 @@ def index(request):
     """
     View of main page
     """
-    latest_question_list = Question.objects.order_by('-pub_date')[:5]
-    context = {'latest_question_list': latest_question_list}
-    return render(request, 'polls/index.html', context)
-
-
-def detail(request, question_id):
-    """
-    View of question detail
-    """
-    question = get_object_or_404(Question, pk=question_id)
-    return render(request, 'polls/detail.html', {'question': question})
-
-
-def results(request, question_id):
-    """
-    View of question result
-    """
-    question = get_object_or_404(Question, pk=question_id)
-    return render(request, 'polls/results.html', {'question': question})
-
-
-def vote(request, question_id):
-    """
-    Vote POST function
-    """
-    question = get_object_or_404(Question, pk=question_id)
-    try:
-        selected_choice = question.choice_set.get(pk=request.POST['choice'])
-    except (KeyError, Choice.DoesNotExist):
-        # Redisplay the question voting form.
-        return render(request, 'polls/detail.html', {
-            'question': question,
-            'error_message': "You didn't select a choice.",
-        })
-    else:
-        selected_choice.votes += 1
-        selected_choice.save()
-        # Always return an HttpResponseRedirect after successfully dealing
-        # with POST data. This prevents data from being posted twice if a
-        # user hits the Back button.
-        return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
+    return HttpResponseRedirect(reverse('polls:user_profile',))
 
 
 def user_profile(request):
@@ -81,10 +42,22 @@ def event(request):
     """
     if request.method == "POST":
 
-        try:
+        # try:
+            users_list=User.objects.filter()
+            print(users_list)
+            users = len(User.objects.filter())
             start_date = request.POST['start_date']
             start_time = request.POST['start_time']
             duration = request.POST['duration']
+            if duration > users:
+                message = {
+                'mtype': "danger",
+                'text': "Podano zbyt dużą liczbę urzytkowników",
+                'bold': "Błąd!"
+                }
+                print(ex)
+                return render(request, 'polls/create_event.html', {'message': message})
+            
             title = request.POST['title']
             eastern = pytz.timezone('Europe/Warsaw')
             start_datetime = eastern.localize(datetime.combine(
@@ -93,19 +66,21 @@ def event(request):
             duration = datetime.strptime(duration, "%H:%M")
             duration = timedelta(hours=duration.hour, minutes=duration.minute)
             quantity = request.POST['quantity']
-            Event.objects.create(
+            created_event = Event.objects.create(
                 searching_start_time=start_datetime,
                 duration=duration.total_seconds(),
                 title=title,
                 quantity=quantity
             )
             terms = Plan.objects.filter(end_time__gt=start_datetime)
-            users = len(User.objects.filter())
+            last_end_date = Plan.objects.all().aggregate(Max('end_time'))
             found_term = find_term(duration=int(duration.total_seconds() / 60),
                                    searching_start_time=start_datetime,
                                    terms=terms,
                                    quantity=int(quantity),
-                                   users=users)
+                                   users=users,
+                                   end_time=last_end_date)
+
             (date, list_of_term) = found_term
             term_list = []
             for element in list_of_term:
@@ -117,15 +92,15 @@ def event(request):
 
             return render(request, 'polls/event_found.html', {'date': date,
                                                               'list_of_term': term_list,
-                                                              'event': new_event})
-        except Exception as ex:
-            message = {
-                'mtype': "danger",
-                'text': "Nie udało się dodać planów do bazy danych",
-                'bold': "Błąd!"
-            }
-            print(ex)
-            return render(request, 'polls/create_event.html', {'message': message})
+                                                              'event': created_event})
+        # except Exception as ex:
+        #     message = {
+        #         'mtype': "danger",
+        #         'text': "Nie udało się dodać planów do bazy danych",
+        #         'bold': "Błąd!"
+        #     }
+        #     print(ex)
+        #     return render(request, 'polls/create_event.html', {'message': message})
     else:
         return render(request, 'polls/create_event.html')
 
@@ -188,7 +163,7 @@ def delete_events(request):
     If user is superuser - delete all Event entry
     """
     if request.method == "POST" and request.user.is_superuser:
-        terms = Event.objects.filter().delete
+        terms = Event.objects.filter().delete()
         print(terms)
     return HttpResponseRedirect(reverse('polls:user_profile',))
 
