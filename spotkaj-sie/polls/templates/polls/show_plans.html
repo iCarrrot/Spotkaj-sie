@@ -1,0 +1,19 @@
+{% extends 'polls/base.html' %} {% block content %} 
+{% if message %}
+<div class="alert alert-{{message.mtype}}">
+    <strong>{{message.bold}}</strong> {{message.text}}
+</div>
+{% endif %}
+<div class="jumbotron">
+    <h1>Twoje plany</h1>
+    <ol class="list-group">
+    {% for term in terms %}
+    {% if term.user == request.user %}
+        <li class="list-group-item"><h5 class="mb-1">{{term.title}}</h5> <small>{{term.start_time}} - {{term.end_time}} </small> </li>
+    {% endif %}
+    {% endfor %}
+    </ol>  
+
+
+</div>
+{% endblock %}

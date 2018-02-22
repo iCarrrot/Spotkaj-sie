@@ -1,0 +1,20 @@
+{% extends 'polls/base.html' %} {% block content %} 
+{% if message %}
+<div class="alert alert-{{message.mtype}}">
+    <strong>{{message.bold}}</strong> {{message.text}}
+</div>
+{% endif %}
+<div class="jumbotron">
+    <h1>Aktywne wydarzenia</h1>
+    <ol class="list-group">
+    {% for event in events %}
+        <li class="list-group-item"><h5 class="mb-1">{{event.title}}</h5> 
+            {{event.found_time}} ({{event.duration}} min) <br>
+            <small>Liczba osób: {{event.quantity}}</small> 
+        </li>
+    {% endfor %}
+    </ol>  
+
+
+</div>
+{% endblock %}

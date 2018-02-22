@@ -5,13 +5,18 @@
     <h1 class="display-3">Witaj {{ user.username}}!</h1>
     <p class="lead">Możesz dodać swoje zajęcia, lub utworzyć wydarzenie.</p>
     <div class="row">
-        <div class="col-1">
-            <a href="{% url 'polls:plans' %}" class="btn btn-info btn-lg">
+        <div class="col-2">
+            <a href="{% url 'polls:plans' %}" class="btn btn-primary btn-lg">
                 Dodaj Zajęcia
             </a>
         </div>
+        <div class="col-1">
+            <a href="{% url 'polls:show_plans' %}" class="btn btn-info btn-lg">
+                Pokaż zajęcia
+            </a>
+        </div>
         {% if request.user.is_superuser %}
-        <div class="col-4">
+        <div class="col-3">
 
         </div>
 
@@ -26,13 +31,18 @@
     <br>
     <br>
     <div class="row">
-        <div class="col-1">
-            <a href="{% url 'polls:event' %}" class="btn btn-success btn-lg">
+        <div class="col-2">
+            <a href="{% url 'polls:event' %}" class="btn btn-dark btn-lg">
                 Utwórz wydarzenie
             </a>
         </div>
+        <div class="col-1">
+            <a href="{% url 'polls:show_events' %}" class="btn btn-secondary btn-lg">
+                Pokaż wydarzenia
+            </a>
+        </div>
         {% if request.user.is_superuser %}
-        <div class="col-4">
+        <div class="col-3">
 
         </div>
 
@@ -47,7 +57,7 @@
 
 </div>
 <p>
-    <a href="{% url 'polls:logout' %}" class="btn btn-primary btn-lg">
+    <a href="{% url 'polls:logout' %}" class="btn btn-warning btn-lg">
         Wyloguj
     </a>
 </p>
